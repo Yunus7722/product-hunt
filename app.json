@@ -8,8 +8,8 @@
         }
       ]
     ],
-    "name": "amazingApp",
-    "slug": "amazingApp",
+    "name": "product_hunt_app",
+    "slug": "product_hunt_app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -32,10 +32,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.olo.testapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e5bc0cd1-79a7-4816-b7b7-caa165f9488a"
+      }
     }
   }
 }

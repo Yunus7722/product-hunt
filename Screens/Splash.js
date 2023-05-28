@@ -9,11 +9,11 @@ import * as Animatable from 'react-native-animatable';
 
 const Splash = ({ navigation }) => {
 
-  useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate('Login')
-    }, 6500)
-  }, [])
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     navigation.navigate('Login')
+  //   }, 6500)
+  // }, [])
 
   return (
     <View style={styles.container}>
@@ -23,7 +23,7 @@ const Splash = ({ navigation }) => {
           // duration={10000}
           duration={5000}
           resizeMode='stretch'
-          source={require('../images/olo_logo.png')}
+          source={require('../images/twitter.png')}
         />
       </View>
       <Animatable.View
@@ -32,43 +32,14 @@ const Splash = ({ navigation }) => {
         duration={5000}
         style={styles.footer}>
         <Text style={styles.title}>Stay connected with us....!</Text>
-        <Text style={styles.text}>Sign in with your account</Text>
-        {/* <View style={styles.button}>
-          <TouchableOpacity
-          onPress={()=>{navigation.navigate('Login')}}
-          style={styles.signIn}
-          >
-
-            <Text style={styles.textSign}>
-              Get Started
-            </Text>
-            <MaterialIcons
-              name='navigate-next'
-              color='#fff'
-              size={27}
-            />
-
-          </TouchableOpacity>
-        </View> */}
-        {/* <TouchableOpacity onPress={()=>navigation.navigate('Login')}>
-                <LinearGradient
-                    colors={['#08d4c4', '#01ab9d']}
-                    style={styles.signIn}
-                >
-                    <Text style={styles.textSign}>Get Started</Text>
-                    <MaterialIcons 
-                        name="navigate-next"
-                        color="#fff"
-                        size={20}
-                    />
-                </LinearGradient>
-            </TouchableOpacity> */}
-        <View style={{borderWidth:1,height:60,marginTop:50,borderRadius:30,borderColor:'#132F3F',}}>
+        <Text style={styles.text}>Sign in with your twitter account</Text>
+      
+        <View style={{borderWidth:1,height:'25%',marginTop:50,borderRadius:30,borderColor:'#132F3F',}}>
           <Animatable.View
           // animation='slideInLeft'
           animation={{
             from: { translateX: -180 },
-            to: { translateX: 0 },
+            to: { translateX:6},
           }}
           duration={5000}
           delay={2000}
@@ -78,14 +49,14 @@ const Splash = ({ navigation }) => {
               style={styles.signIn}
             >
 
-              {/* <Text style={styles.textSign}>
-                Get Started
+              <Text style={styles.textSign}>
+                Sign In
               </Text>
               <MaterialIcons
                 name='navigate-next'
                 color='#fff'
                 size={27}
-              /> */}
+              />
 
             </TouchableOpacity>
           </Animatable.View>
@@ -136,8 +107,8 @@ const styles = StyleSheet.create({
     marginTop: 0
   },
   signIn: {
-    width: 150,
-    height: 60,
+    width: '40%',
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,

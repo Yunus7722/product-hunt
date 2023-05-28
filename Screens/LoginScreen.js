@@ -1,18 +1,22 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
-import React, { useState } from 'react'
-import { Button, TextInput } from 'react-native-paper'
+import { StyleSheet, Text, View, Image, Dimensions } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { Button, TextInput, HelperText } from 'react-native-paper'
 
 import { Feather, FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import * as Animatable from 'react-native-animatable';
-import { Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import Ripple from 'react-native-material-ripple';
 import SlidingToast from './SlidingToast';
 
-
+// User Id : admin
+//password :admin@123
 
 
 const LoginScreen = ({ navigation }) => {
+
+    
+
+    const { width, height } = Dimensions.get('window').width;
 
     //for Toast Message
     const [toastVisible, setToastVisible] = useState(false);
@@ -29,47 +33,87 @@ const LoginScreen = ({ navigation }) => {
 
     //Functionality for Username and Password
     const [userId, setUserId] = useState('')
-    const [OrgId, setOrgId] = useState('')
     const [password, setPassword] = useState('')
 
     const handleLogin = () => {
 
-        if (userId === 'superadmin' && OrgId === 'superadmin' && password === 'admin@123') {
+        if (userId === 'admin' && password === 'admin@123') {
             // showToast('Invalid Credentials', 5000)
             navigation.navigate('MyDrawer')
-            
-        }else if(userId === 'workmen' && OrgId === 'workmen' && password === 'admin@123')
-        {
-            // showToast('These is Workmen', 5000)
-            navigation.navigate('WorkmenDrawer')
-       }else if(userId === 'admin' && OrgId === 'admin' && password === 'admin@123')
-       {
-           // showToast('These is Workmen', 5000)
-           navigation.navigate('AdminDrawer')
-      }
-       else if(userId === '' && OrgId === '' && password === '')
-         {
-            showToast('Input Fields are Empty', 5000)
-        }
-         else {
+
+        } 
+        else {
             showToast('Invalid Credentials', 5000)
         }
     }
 
     const [hidePassword, setHidePassword] = useState(true)
 
+    //For helper Text
+
+    // const onChangeUserId = userId => setUserId(userId);
+
+    // const userIdError =()=>{
+    //     return !userId.includes('@');
+    // }
+
+
+
+    //For Validation for userID
+
+    const [userIDFocused, setUserIDFocused] = useState(false)
+    const [userIDValidated, setUserIDValidated] = useState(false)
+    const userIdRegex = /^[a-zA-Z0-9]*$/;
+    const orgIdRegex = /^[a-zA-Z0-9]*$/;
+
+    const handleUserIdFocus = () => {
+        setUserIDFocused(true);
+    }
+    const handleUserIdBlur = () => {
+        setUserIDFocused(false);
+    }
+
+    useEffect(() => {
+        const errors = !userIdRegex.test(userId)
+        setUserIDValidated(!errors)
+    }, [userId])
+
+    const hasUserErrors = () => {
+        return (
+            !userIdRegex.test(userId)
+        );
+    };
+
+
+    //For Validation for password
+
+    const [passwordFocused, setPasswordFocused] = useState(false)
+    const [passwordValidated, setPasswordValidated] = useState(false)
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    const handlePasswordFocus = () => {
+        setPasswordFocused(true);
+    }
+    const handlePasswordBlur = () => {
+        setPasswordFocused(false);
+    }
+
+    useEffect(() => {
+        const errors = password.length > 0 && !passwordRegex.test(password)
+        setPasswordValidated(!errors)
+    }, [password])
+
+    const hasPasswordErrors = () => {
+        return (
+            password.length > 0 && !passwordRegex.test(password)
+        )
+    }
 
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Animatable.Image style={styles.logo}
-                    animation='zoomIn'
-                    // duration={10000}
-                    duration={5000}
-                    resizeMode='cover'
-                    source={require('../images/olo_logo1.png')}
-                />
+            
             </View>
             <Animatable.View
                 style={styles.footer}
@@ -79,101 +123,57 @@ const LoginScreen = ({ navigation }) => {
                 <Text style={styles.text_footer}>Login to your Account</Text>
                 <TextInput
                     mode="outlined"
-                    label="User Id"
+                    label="User ID"
                     value={userId}
                     onChangeText={setUserId}
+                    onFocus={handleUserIdFocus}
+                    onBlur={handleUserIdBlur}
                     placeholder=''
                     placeholderTextColor='orange'
-                    style={[styles.input, { width: '100%', paddingTop: 30, }, styles.label]}
+                    style={[styles.input, { width: '100%', paddingTop: 20, height: 50 }, styles.label]}
                     // labelStyle={{ color: 'green' }}
                     // theme={{ colors: { primary: 'red' }}}
                     // theme={{ colors: { primary: 'orange', placeholder: 'white', text: 'white' } }}
-                    theme={{ colors: { primary: userId === '' ? 'red' : 'orange', placeholder: userId === '' ? 'white' : '#9ef01a', text: 'white' } }}
+                    theme={userIDValidated ? { colors: { primary: '#9ef01a', placeholder: 'white', text: 'white' } } : { colors: { primary: 'red', placeholder: '#9ef01a', text: 'white' } }}
                 />
-                <TextInput
-                    mode="outlined"
-                    label="Organisation Id"
+                <HelperText style={{ marginLeft: '3%' }} type='error' visible={hasUserErrors()} >
+                    <Text style={{ color: '#fb4b4e', fontSize: 13 }}>User Id is not Invalid</Text>
+                </HelperText>
 
-                    value={OrgId}
-                    onChangeText={setOrgId}
-                    placeholder=''
-                    placeholderTextColor='orange'
-                    style={[styles.input, { width: '100%', paddingTop: 20 }, styles.label]}
-                    // labelStyle={{ color: 'green' }}
-                    // theme={{ colors: { primary: 'red' }}}
-                    // theme={{ colors: { primary: 'orange', placeholder: 'white', text: 'white' } }}
-                    theme={{ colors: { primary: OrgId === '' ? 'red' : 'orange', placeholder: OrgId === '' ? 'white' : '#9ef01a', text: 'white' } }}
-
-                />
                 <View>
                     <TextInput
+                    
                         mode="outlined"
                         label="Password"
                         value={password}
                         onChangeText={setPassword}
                         secureTextEntry={hidePassword}
-                        placeholder=' '
-                        placeholderTextColor='orange'
-                        style={[styles.input, { width: '100%', paddingTop: 20, }, styles.label]}
+                        onFocus={handlePasswordFocus}
+                        onBlur={handlePasswordBlur}
+                        placeholder='admin@123'
+                        placeholderTextColor='#e5e5e5'
+                        style={[styles.input, { width: '100%', paddingTop: 0, height: 50 }, styles.label]}
                         // labelStyle={{ color: 'green' }}
                         // theme={{ colors: { primary: 'red' }}}
                         // theme={{ colors: { primary: 'orange', placeholder: 'white', text: 'white' } }}
                         right={<TextInput.Icon onPress={() => { setHidePassword(!hidePassword) }} icon="eye" color='white' size={22} style={{ marginTop: 15, marginRight: 20 }} />}
-                        theme={{ colors: { primary: password === '' ? 'red' : 'orange', placeholder: password === '' ? 'white' : '#9ef01a', text: 'white' } }}
+                        theme={passwordValidated ? { colors: { primary: '#9ef01a', placeholder: 'white', text: 'white' } } : { colors: { primary: 'red', placeholder: '#9ef01a', text: 'white' } }}
 
 
                     />
+                    <HelperText style={{ marginLeft: '3%' }} type='error' visible={hasPasswordErrors()} >
+
+                        {
+                            (password.length > 0 && password.length <= 8)
+                                ? <Text style={{ color: '#fb4b4e', fontSize: 13 }}>Password should be at least 8 characters long </Text> :
+                                <Text style={{ color: '#fb4b4e', fontSize: 13 }}>Password should contain at least one digit and one special character</Text>
+                        }
+                    </HelperText>
 
                 </View>
-                {/* <Feather name='eye-off' size={20} color='white' /> */}
-                {/* </TextInput> */}
+               
 
-                <Image
-                    style={{ height: 70, width: 330, marginTop: 20 }}
-                    source={require('../images/captha.jpg')}
-                    resizeMode='stretch'
-                    alignSelf='center'
-                />
-                <View style={{ flexDirection: 'row', marginHorizontal: 20, marginVertical: 10, }}>
-                    <TextInput
-                        mode='flat'
-                        style={{ width: '60%', height: 35, }}
-                    // labelStyle={{ color: 'green' }}
-                    // theme={{ colors: { primary: 'red' }}}
-                    // theme={{ colors: { primary: 'orange', placeholder: '#a2d6f9', text: 'white' } }}
-
-                    />
-                    <Button
-                        color='black'
-
-                        style={{ backgroundColor: '#bdbdbd', borderTopRightRadius: 20, borderBottomRightRadius: 20, }}>
-                        <Text style={{ fontSize: 10 }}>check</Text>
-                    </Button>
-                </View>
-                <Text onPress={() => navigation.navigate('ForgotPassword')}
-                    style={{
-                        color: '#fff',
-                        fontSize: 15,
-                        alignSelf: 'center',
-                        paddingTop: 5,
-                        paddingBottom: 20,
-                        fontWeight: '500'
-                    }}>Forgot Password ?</Text>
-
-                {/* <TouchableOpacity
-                    style={{ height: 40, width: '90%', backgroundColor: '#e91e63', marginLeft: 20, borderRadius: 20 }}
-                >
-                    <Text style={{
-                        color: 'white',
-                        fontSize: 20,
-                        alignSelf: 'center',
-                        paddingTop: 5,
-                        fontWeight: '800',
-
-                    }}>Login</Text>
-                </TouchableOpacity> */}
-
-                <View style={{ alignSelf: 'center' }}>
+                <View style={{ alignSelf: 'center', width: '90%', height: '30%' }}>
                     <Ripple
                         onPress={handleLogin}
                         rippleColor='#ffc4d6'
@@ -181,8 +181,8 @@ const LoginScreen = ({ navigation }) => {
                         rippleOpacity={1}
                         rippleDuration={1000}
                         style={{
-                            width: 320,
-                            height: 40,
+                            // width: 340,
+                            height: '30%',
                             alignItems: 'center',
                             justifyContent: 'center',
                             backgroundColor: '#EE8021',
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     header: {
-        flex: 0.7,
+        flex: 1.4,
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 20,
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     },
     logo: {
         height: logo_dimen,
-        width: logo_dimen * 4,
+        width: logo_dimen * 4.2,
         borderRadius: 22,
         marginTop: 60
     },
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18,
         alignSelf: 'center',
-        paddingTop: 20,
+        paddingTop: '20%',
         fontWeight: '500'
     },
     action: {
@@ -305,6 +305,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         // paddingTop:50,
         backgroundColor: '#1C4359',
+        
 
     },
     label: {

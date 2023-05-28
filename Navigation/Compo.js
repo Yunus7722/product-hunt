@@ -6,7 +6,7 @@ const Compo = () => {
         <View>
             <Image
                 style={{ width: 40, height: 20 }}
-                source={require('../images/logo2.png')} />
+                source={require('../images/twitter.png')} />
         </View>
     )
 }
